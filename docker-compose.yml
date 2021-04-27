@@ -36,8 +36,7 @@ services:
 
   mysql:
     image: mysql:8.0
+    env_file:
+      - .env
     environment:
-      - MYSQL_ROOT_PASSWORD=verysecret
-      - MYSQL_DATABASE=yii2advanced
-      - MYSQL_USER=yii2advanced
-      - MYSQL_PASSWORD=secret
+      - MYSQL_ALLOW_EMPTY_PASSWORD:'yes'
