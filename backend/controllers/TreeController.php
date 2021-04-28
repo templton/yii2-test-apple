@@ -4,6 +4,8 @@ namespace backend\controllers;
 
 use backend\workflow\enums\StatusEnums;
 use Yii;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use backend\service\AppleTreeService;
 use backend\service\AppleService;
@@ -21,6 +23,22 @@ class TreeController extends Controller
     const TREE_ACTION_CREATE_NEW = 'tree_action_create_new';
     const APPLE_ACTION_EAT = 'apple_action_eat';
     const APPLE_ACTION_FALL = 'apple_action_fall';
+
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['index'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ]
+        ];
+    }
 
     public function actionIndex()
     {
