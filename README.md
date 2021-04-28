@@ -30,7 +30,7 @@ Which environment do you want the application to be initialized in? - Выбра
 
 Initialize the application under 'Development' environment? - Выбрать yes
 
-Настроить подключение к базе данных. Открываем файл `common/config/main-local.php` и задаем настройки компонента db:
+Настроить подключение к базе данных. Открываем файл `sudo nano common/config/main-local.php` и задаем настройки компонента db:
 
 ` db => [
         
