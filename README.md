@@ -30,6 +30,24 @@ Which environment do you want the application to be initialized in? - Выбра
 
 Initialize the application under 'Development' environment? - Выбрать yes
 
+Настроить подключение к базе данных. Открываем файл `common/config/main-local.php` и задаем настройки компонента db:
+
+`
+        'db' => [
+            'class' => 'yii\db\Connection',
+            'dsn' => 'mysql:host='.env('MYSQL_HOST').';dbname='.env('MYSQL_DB_NAME'),
+            'username' => env('MYSQL_USER'),
+            'password' => env('MYSQL_PASSWORD'),
+            'charset' => 'utf8',
+        ],
+`
+
+Перезапустить контейнер:
+
+`docker-compose down`
+
+`docker-compose up -d --build`
+
 Запустить миграции:
 
 `docker exec -it apple_backend php yii migrate`
