@@ -50,14 +50,18 @@ Initialize the application under 'Development' environment? - Выбрать yes
 
 `docker-compose down`
 
-`docker-compose up -d --build`
+`docker-compose up -d`
 
 Запустить миграции:
 
 `docker exec -it apple_backend php yii migrate`
 
-Примечание: если контейнер уже сбилдился ранее, то после запуска `docker-compose up -d`, чтобы применить миграции, нужно подождать несколько 
-секунд, чтобы контейнер с mysql успел развернуться. 
+Если видим ошибку
+
+`Exception 'yii\db\Exception' with message 'SQLSTATE[HY000] [2002] Connection refused'`
+
+Значит, нужно подождать ~1 минуту (чтобы поднялся контейнер mysql) и повторить команду
+
 
 <h2>Страницы проекта</h2>
 
