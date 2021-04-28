@@ -31,3 +31,21 @@
 .apple-info {
  margin-top: 300px;
 }
+
+.action-block {
+    margin-top: 20px;
+    border: 1px solid gray;
+    padding: 5px;
+}
+
+.action-block input[name="volume"]{
+    width: 50px;
+}
+
+.action-header {
+    font-size: 14px;
+}
+
+.active-apple{
+    border: 1px solid mediumvioletred;
+}

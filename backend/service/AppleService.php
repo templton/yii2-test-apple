@@ -48,7 +48,7 @@ class AppleService
     public function eatApple(int $appleId, $volume):?Apple
     {
         if ($volume<0 || $volume>1){
-            throw new FieldNotValidException('volume должно быть в пределах от 0 до 1');
+            throw new FieldNotValidException('volume должно быть в пределах от 0 до 100');
         }
 
         $apple = $this->findAppleById($appleId);

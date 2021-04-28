@@ -38,11 +38,13 @@ class Apple extends ActiveRecord
 
     public function toFrontEndArray()
     {
+        $volume = $this->current_volume * 100;
         return [
             'id' => $this->id,
             'color' => $this->color->sys_name,
             'fallenDate' => $this->fallen_date,
-            'statusName' => $this->status->name
+            'statusName' => $this->status->name,
+            'currentVolume' => $volume . '%'
         ];
     }
 }
