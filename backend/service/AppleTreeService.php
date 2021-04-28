@@ -3,6 +3,7 @@
 namespace backend\service;
 
 use backend\constant\TreeConstant;
+use backend\models\domain\Apple;
 use backend\repository\AppleRepository;
 
 class AppleTreeService
@@ -23,6 +24,11 @@ class AppleTreeService
     public function clearTree()
     {
         AppleRepository::clearAll();
+    }
+
+    public function getAllApples()
+    {
+        return Apple::find()->all();
     }
 
     public static function getInstance(): self

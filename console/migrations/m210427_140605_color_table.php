@@ -27,7 +27,9 @@ class m210427_140605_color_table extends Migration
             ['Зеленый', 'green'],
             ['Красный', 'red'],
             ['Желтый', 'yellow'],
-            ['Белый', 'white'],
+            ['Серый', 'gray'],
+            ['Коричневый', 'brown'],
+            ['Черный', 'black'],
         ]);
     }
 

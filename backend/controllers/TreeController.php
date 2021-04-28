@@ -14,6 +14,25 @@ use backend\service\AppleTreeService;
  */
 class TreeController extends Controller
 {
+    public function actionIndex()
+    {
+        $objects = AppleTreeService::getInstance()->getAllApples();
+
+        $colors = [];
+        $apples = [];
+        foreach ($objects as $apple) {
+            $colors[] = $apple->color->sys_name;
+            $apples[] = $apple->toFrontEndArray();
+        }
+
+        $colors = array_unique($colors);
+
+        return $this->render('index', [
+            'apples' => $apples,
+            'colors' => $colors
+        ]);
+    }
+
     public function actionCreateNewTree()
     {
         $data = AppleTreeService::getInstance()->createNewTree();

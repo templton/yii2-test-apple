@@ -28,11 +28,21 @@ class Apple extends ActiveRecord
 
     public function getColor()
     {
-        return $this->hasOne(Apple::class, ['id' => 'color_id'])->one();
+        return $this->hasOne(Color::class, ['id' => 'color_id'])->one();
     }
 
     public function getStatus()
     {
         return $this->hasOne(Status::class, ['id' => 'status_id'])->one();
+    }
+
+    public function toFrontEndArray()
+    {
+        return [
+            'id' => $this->id,
+            'color' => $this->color->sys_name,
+            'fallenDate' => $this->fallen_date,
+            'statusName' => $this->status->name
+        ];
     }
 }
