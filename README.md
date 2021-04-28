@@ -14,6 +14,10 @@
 
 `cd yii2-test-apple`
 
+Сбилдить проект:
+
+`docker-compose up -d --build`
+
 Установить зависимости composer:
 
 `docker exec -it apple_backend composer install`
