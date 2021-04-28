@@ -8,7 +8,7 @@
 
 Скачать репозиторий
 
-`https://github.com/templton/yii2-test-apple.git`
+`git clone https://github.com/templton/yii2-test-apple.git`
 
 Перейти в катлог с репозиторием:
 
