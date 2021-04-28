@@ -31,4 +31,9 @@ class AppleRepository
     {
         return Apple::findOne($appleId);
     }
+
+    public static function deleteApple(int $appleId)
+    {
+        Apple::deleteAll(['id' => $appleId]);
+    }
 }

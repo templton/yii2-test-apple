@@ -22,7 +22,7 @@ class m210427_140913_apple_table extends Migration
             'fallen_date'=>$this->dateTime()->comment('Время падения на землю'),
             'status_id'=>$this->integer()->comment('Статус яблока'),
             'color_id'=>$this->integer()->comment('Цвет яблока'),
-            'current_volume'=>$this->decimal()->comment('Остаток яблока в процентах')->defaultValue(1),
+            'current_volume'=>$this->decimal(10,1)->comment('Остаток яблока в процентах')->defaultValue(1),
             'created'=>$this->dateTime()
         ], 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB');
 

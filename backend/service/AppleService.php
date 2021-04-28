@@ -7,6 +7,7 @@ use backend\dataProvider\ColorDataProvider;
 use backend\repository\AppleRepository;
 use backend\exception\AppleNotFoundException;
 use backend\workflow\Workflow;
+use backend\exception\FieldNotValidException;
 
 class AppleService
 {
@@ -26,29 +27,33 @@ class AppleService
      *
      * @param int $appleId
      * @return Apple
+     * @throws AppleNotFoundException
      */
     public function fallApple(int $appleId): Apple
     {
-        $apple = AppleRepository::findById($appleId);
-
-        if (!$apple){
-            throw new AppleNotFoundException('Яблоко с id='.$appleId.' не найдено');
-        }
-
+        $apple = $this->findAppleById($appleId);
         $workflow = new Workflow();
         return $workflow->appleFall($apple);
     }
 
-
     /**
-     * Откусить от яблока
+     * Откусить яблоко
      *
-     * @param $volume decimal Сколько откусить в процентах от 0 до 1
-     * @return Apple
+     * @param int $appleId
+     * @param $volume
+     * @return Apple|null
+     * @throws AppleNotFoundException
+     * @throws FieldNotValidException
      */
-    public function eatApple($volume):Apple
+    public function eatApple(int $appleId, $volume):?Apple
     {
+        if ($volume<0 || $volume>1){
+            throw new FieldNotValidException('volume должно быть в пределах от 0 до 1');
+        }
 
+        $apple = $this->findAppleById($appleId);
+        $workflow = new Workflow();
+        return $workflow->appleEat($apple, $volume);
     }
 
     /**
@@ -59,6 +64,17 @@ class AppleService
     public function setAppleRotten(): Apple
     {
 
+    }
+
+    public function findAppleById(int $appleId): Apple
+    {
+        $apple = AppleRepository::findById($appleId);
+
+        if (!$apple){
+            throw new AppleNotFoundException('Яблоко с id='.$appleId.' не найдено');
+        }
+
+        return $apple;
     }
 
     public static function getInstance(): self
