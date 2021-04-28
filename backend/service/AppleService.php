@@ -5,6 +5,8 @@ namespace backend\service;
 use backend\models\domain\Apple;
 use backend\dataProvider\ColorDataProvider;
 use backend\repository\AppleRepository;
+use backend\exception\AppleNotFoundException;
+use backend\workflow\Workflow;
 
 class AppleService
 {
@@ -22,11 +24,19 @@ class AppleService
     /**
      * Бросить яблоко на землю
      *
-     * @param Apple $apple
+     * @param int $appleId
+     * @return Apple
      */
-    public function fallApple(Apple $apple): Apple
+    public function fallApple(int $appleId): Apple
     {
+        $apple = AppleRepository::findById($appleId);
 
+        if (!$apple){
+            throw new AppleNotFoundException('Яблоко с id='.$appleId.' не найдено');
+        }
+
+        $workflow = new Workflow();
+        return $workflow->appleFall($apple);
     }
 
 

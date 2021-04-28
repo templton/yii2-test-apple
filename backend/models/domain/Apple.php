@@ -30,4 +30,9 @@ class Apple extends ActiveRecord
     {
         return $this->hasOne(Apple::class, ['id' => 'color_id'])->one();
     }
+
+    public function getStatus()
+    {
+        return $this->hasOne(Status::class, ['id' => 'status_id'])->one();
+    }
 }
