@@ -10,6 +10,10 @@
 
 `https://github.com/templton/yii2-test-apple.git`
 
+Перейти в катлог с репозиторием:
+
+`cd yii2-test-apple`
+
 Установить зависимости composer:
 
 `docker exec -it apple_backend composer install`
