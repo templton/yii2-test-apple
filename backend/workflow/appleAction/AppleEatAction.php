@@ -39,7 +39,7 @@ class AppleEatAction extends AbstractAppleAction
      * @param $volume
      * @return bool
      */
-    protected function canEatVolume($volume)
+    protected function canEatVolume($volume): bool
     {
         return $volume <= $this->apple->current_volume;
     }
@@ -49,7 +49,7 @@ class AppleEatAction extends AbstractAppleAction
      *
      * @return bool
      */
-    protected function canEatInCurrentStatus()
+    protected function canEatInCurrentStatus(): bool
     {
         return $this->apple->status->sys_name === StatusEnums::STATE_ON_GROUND;
     }
