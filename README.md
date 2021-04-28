@@ -8,11 +8,27 @@
 
 Скачать репозиторий
 
-`https://github.com/templton/yii2-test-apple.git`
+`git clone https://github.com/templton/yii2-test-apple.git`
+
+Перейти в катлог с репозиторием:
+
+`cd yii2-test-apple`
+
+Сбилдить проект:
+
+`docker-compose up -d --build`
 
 Установить зависимости composer:
 
 `docker exec -it apple_backend composer install`
+
+Инициализация окружения:
+
+`docker exec -it apple_backend php ./init`
+
+Which environment do you want the application to be initialized in? - Выбрать [0] Development
+
+Initialize the application under 'Development' environment? - Выбрать yes
 
 Запустить миграции:
 
