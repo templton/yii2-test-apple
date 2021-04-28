@@ -11,8 +11,8 @@ class AppleFallAction extends AbstractAppleAction
 {
     public function execute(): Apple
     {
-        if ($this->apple->fallen_date){
-            throw new NotWorkflowActionException('Яблоко уже на земле');
+        if ($this->apple->status->sys_name !== StatusEnums::STATE_ON_TREE){
+            throw new NotWorkflowActionException('Яблоко уже на земле.');
         }
 
         $status = StatusDataProvider::getInstance()->getStatus(StatusEnums::STATE_ON_GROUND);
