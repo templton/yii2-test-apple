@@ -22,6 +22,14 @@
 
 `docker exec -it apple_backend composer install`
 
+Инициализация окружения:
+
+`docker exec -it apple_backend php ./init`
+
+Which environment do you want the application to be initialized in? - Выбрать [0] Development
+
+Initialize the application under 'Development' environment? - Выбрать yes
+
 Запустить миграции:
 
 `docker exec -it apple_backend php yii migrate`
