@@ -30,12 +30,38 @@ Which environment do you want the application to be initialized in? - Выбра
 
 Initialize the application under 'Development' environment? - Выбрать yes
 
+Настроить подключение к базе данных. Открываем файл `sudo nano common/config/main-local.php` и задаем настройки компонента db:
+
+` db => [
+        
+    'class' => 'yii\db\Connection',
+
+    'dsn' => 'mysql:host='.env('MYSQL_HOST').';dbname='.env('MYSQL_DB_NAME'),
+
+    'username' => env('MYSQL_USER'),
+
+    'password' => env('MYSQL_PASSWORD'),
+
+    'charset' => 'utf8',
+            
+],`
+
+Перезапустить контейнер:
+
+`docker-compose down`
+
+`docker-compose up -d`
+
 Запустить миграции:
 
 `docker exec -it apple_backend php yii migrate`
 
-Примечание: если контейнер уже сбилдился ранее, то после запуска `docker-compose up -d`, чтобы применить миграции, нужно подождать несколько 
-секунд, чтобы контейнер с mysql успел развернуться. 
+Если видим ошибку
+
+`Exception 'yii\db\Exception' with message 'SQLSTATE[HY000] [2002] Connection refused'`
+
+Значит, нужно подождать ~1 минуту (чтобы поднялся контейнер mysql) и повторить команду
+
 
 <h2>Страницы проекта</h2>
 
