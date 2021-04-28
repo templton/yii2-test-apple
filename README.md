@@ -32,7 +32,7 @@ Initialize the application under 'Development' environment? - Выбрать yes
 
 Настроить подключение к базе данных. Открываем файл `common/config/main-local.php` и задаем настройки компонента db:
 
-`'db' => [
+` db => [
         
     'class' => 'yii\db\Connection',
 
