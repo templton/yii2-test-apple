@@ -22,6 +22,13 @@ class m210427_140605_color_table extends Migration
         ], 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB');
 
         $this->createIndex('idx-'.self::TABLE_COLOR.'-sys_name', self::TABLE_COLOR, 'sys_name');
+
+        $this->batchInsert(self::TABLE_COLOR, ['name', 'sys_name'], [
+            ['Зеленый', 'green'],
+            ['Красный', 'red'],
+            ['Желтый', 'yellow'],
+            ['Белый', 'white'],
+        ]);
     }
 
     /**
