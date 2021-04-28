@@ -34,6 +34,29 @@ class AppleRepository
 
     public static function deleteApple(int $appleId)
     {
-        Apple::deleteAll(['id' => $appleId]);
+        $apple = Apple::findOne($appleId);
+
+        if ($apple){
+            $apple->delete();
+        }
+    }
+
+    /**
+     * Яблоки, которые лежат на земле слишком долго, пометить как испорченные
+     */
+    public static function markRottenApples()
+    {
+        $dateRotten = StatusEnums::getTimeForRotten();
+        $statusProvider = StatusDataProvider::getInstance();
+
+        $statusOnGround = $statusProvider->getStatus(StatusEnums::STATE_ON_GROUND);
+        $statusRotten = $statusProvider->getStatus(StatusEnums::STATE_ROTTEN);
+
+        return Apple::updateAll([
+            'status_id' => $statusRotten->id
+        ], ['AND',
+            ['=','status_id', $statusOnGround->id],
+            ['<','fallen_date', $dateRotten->format('Y-m-d H:i:s')]
+        ]);
     }
 }
