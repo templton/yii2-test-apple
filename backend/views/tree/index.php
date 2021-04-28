@@ -65,7 +65,7 @@ if (isset($colors) && is_array($colors)){
                         <div class="action-block">
                             <div class="action-header">Откусить от яблока %</div>
                             <?= Html::beginForm(['tree/index'], 'post') ?>
-                            <?= Html::input('text', 'volume', '', ['placeholder' => 50]) ?>
+                            <?= Html::input('text', 'volume', '30') ?>
                             <?= Html::input('hidden', 'appleId', $apple['id']) ?>
                             <?= Html::input('hidden', 'task', $apple['action_eat']) ?>
                             <?= Html::submitButton('Откусить') ?>
