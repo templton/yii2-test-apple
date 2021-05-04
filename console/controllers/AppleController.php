@@ -14,9 +14,7 @@ class AppleController extends Controller
     {
         date_default_timezone_set('Europe/Moscow');
 
-        $action = new MarkAppleRottenAction();
-
-        $count = $action->execute();
+        $count = (new MarkAppleRottenAction())->execute();
 
         echo "Применено $count записей";
 
