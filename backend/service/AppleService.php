@@ -18,7 +18,7 @@ class AppleService
      */
     public function createRandomApple(): Apple
     {
-        $color = ColorDataProvider::getInstance()->getRandomColor();
+        $color = ColorDataProvider::getRandomColor();
         return AppleRepository::createNew($color);
     }
 
@@ -56,16 +56,6 @@ class AppleService
         return $workflow->appleEat($apple, $volume);
     }
 
-    /**
-     * Сделать яблоко протухшим
-     *
-     * @return Apple
-     */
-    public function setAppleRotten(): Apple
-    {
-
-    }
-
     public function findAppleById(int $appleId): Apple
     {
         $apple = AppleRepository::findById($appleId);
@@ -75,10 +65,5 @@ class AppleService
         }
 
         return $apple;
-    }
-
-    public static function getInstance(): self
-    {
-        return new self();
     }
 }

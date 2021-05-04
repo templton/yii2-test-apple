@@ -8,10 +8,10 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use backend\service\AppleTreeService;
-use backend\service\AppleService;
 use backend\exception\AppleNotFoundException;
 use backend\exception\FieldNotValidException;
 use backend\exception\NotWorkflowActionException;
+use backend\service\AppleService;
 
 /**
  * Class TreeController
@@ -20,6 +20,16 @@ use backend\exception\NotWorkflowActionException;
  */
 class TreeController extends Controller
 {
+    /**
+     * @var AppleTreeService
+     */
+    protected $appleTreeService;
+
+    /**
+     * @var AppleService
+     */
+    protected $appleService;
+
     const TREE_ACTION_CREATE_NEW = 'tree_action_create_new';
     const APPLE_ACTION_EAT = 'apple_action_eat';
     const APPLE_ACTION_FALL = 'apple_action_fall';
@@ -40,6 +50,13 @@ class TreeController extends Controller
         ];
     }
 
+    public function __construct($id, $module, $config = [], AppleTreeService $appleTreeService, AppleService $appleService)
+    {
+        parent::__construct($id, $module, $config);
+        $this->appleTreeService = $appleTreeService;
+        $this->appleService = $appleService;
+    }
+
     public function actionIndex()
     {
         $appleId = Yii::$app->request->post('appleId');
@@ -49,7 +66,7 @@ class TreeController extends Controller
             $errors = $this->processFrontTask();
         }
 
-        $objects = AppleTreeService::getInstance()->getAllApples();
+        $objects = $this->appleTreeService->getAllApples();
 
         $colors = [];
         $apples = [];
@@ -87,13 +104,13 @@ class TreeController extends Controller
         try{
             switch (Yii::$app->request->post('task')){
                 case self::TREE_ACTION_CREATE_NEW:
-                    AppleTreeService::getInstance()->createNewTree();
+                    $this->appleTreeService->createNewTree();
                     break;
                 case self::APPLE_ACTION_EAT:
-                    AppleService::getInstance()->eatApple($appleId, $volume);
+                    $this->appleService->eatApple($appleId, $volume);
                     break;
                 case self::APPLE_ACTION_FALL:
-                    AppleService::getInstance()->fallApple($appleId);
+                    $this->appleService->fallApple($appleId);
                     break;
             }
         }catch (FieldNotValidException $e){

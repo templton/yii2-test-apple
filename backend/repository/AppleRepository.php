@@ -12,7 +12,7 @@ class AppleRepository
 {
     public static function createNew(Color $color): Apple
     {
-        $statusOnTree = StatusDataProvider::getInstance()->getStatus(StatusEnums::STATE_ON_TREE);
+        $statusOnTree = StatusDataProvider::getStatus(StatusEnums::STATE_ON_TREE);
 
         $apple = new Apple;
         $apple->color_id = $color->id;
@@ -47,10 +47,9 @@ class AppleRepository
     public static function markRottenApples()
     {
         $dateRotten = StatusEnums::getTimeForRotten();
-        $statusProvider = StatusDataProvider::getInstance();
 
-        $statusOnGround = $statusProvider->getStatus(StatusEnums::STATE_ON_GROUND);
-        $statusRotten = $statusProvider->getStatus(StatusEnums::STATE_ROTTEN);
+        $statusOnGround = StatusDataProvider::getStatus(StatusEnums::STATE_ON_GROUND);
+        $statusRotten = StatusDataProvider::getStatus(StatusEnums::STATE_ROTTEN);
 
         return Apple::updateAll([
             'status_id' => $statusRotten->id

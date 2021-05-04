@@ -15,7 +15,7 @@ class AppleFallAction extends AbstractAppleAction
             throw new NotWorkflowActionException('Яблоко уже на земле.');
         }
 
-        $status = StatusDataProvider::getInstance()->getStatus(StatusEnums::STATE_ON_GROUND);
+        $status = StatusDataProvider::getStatus(StatusEnums::STATE_ON_GROUND);
 
         $this->apple->fallen_date = date('Y-m-d H:i:s');
         $this->apple->status_id = $status->id;

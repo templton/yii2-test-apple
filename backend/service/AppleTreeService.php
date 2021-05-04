@@ -8,6 +8,13 @@ use backend\repository\AppleRepository;
 
 class AppleTreeService
 {
+    protected $appleService;
+
+    public function __construct(AppleService $appleService)
+    {
+        $this->appleService = $appleService;
+    }
+
     public function createNewTree(): array
     {
         $this->clearTree();
@@ -15,7 +22,7 @@ class AppleTreeService
         $appleArrays = [];
 
         for($i=0; $i<TreeConstant::DEFAULT_COUNT_APPLE_ON_TREE; $i++) {
-            $appleArrays[] = AppleService::getInstance()->createRandomApple();
+            $appleArrays[] = $this->appleService->createRandomApple();
         }
 
         return $appleArrays;
@@ -29,10 +36,5 @@ class AppleTreeService
     public function getAllApples()
     {
         return Apple::find()->all();
-    }
-
-    public static function getInstance(): self
-    {
-        return new self();
     }
 }

@@ -1,4 +1,8 @@
 <?php
+
+use backend\service\AppleTreeService;
+use backend\service\AppleService;
+
 return [
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
@@ -17,4 +21,14 @@ return [
             'class' => 'yii\caching\FileCache',
         ],
     ],
+    'container' => [
+        'definitions' => [
+            AppleTreeService::class => [
+                'class' => AppleTreeService::class
+            ],
+            AppleService::class => [
+                'class' => AppleService::class
+            ]
+        ],
+    ]
 ];
