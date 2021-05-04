@@ -40,22 +40,4 @@ class AppleRepository
             $apple->delete();
         }
     }
-
-    /**
-     * Яблоки, которые лежат на земле слишком долго, пометить как испорченные
-     */
-    public static function markRottenApples()
-    {
-        $dateRotten = StatusEnums::getTimeForRotten();
-
-        $statusOnGround = StatusDataProvider::getStatus(StatusEnums::STATE_ON_GROUND);
-        $statusRotten = StatusDataProvider::getStatus(StatusEnums::STATE_ROTTEN);
-
-        return Apple::updateAll([
-            'status_id' => $statusRotten->id
-        ], ['AND',
-            ['=','status_id', $statusOnGround->id],
-            ['<','fallen_date', $dateRotten->format('Y-m-d H:i:s')]
-        ]);
-    }
 }

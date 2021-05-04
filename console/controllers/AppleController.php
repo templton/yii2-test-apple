@@ -6,6 +6,7 @@ use Yii;
 use yii\console\Controller;
 use yii\console\ExitCode;
 use backend\repository\AppleRepository;
+use backend\workflow\treeAction\MarkAppleRottenAction;
 
 class AppleController extends Controller
 {
@@ -13,10 +14,9 @@ class AppleController extends Controller
     {
         date_default_timezone_set('Europe/Moscow');
 
-        $fileName = Yii::getAlias('@runtime/sad.logg');
-        file_put_contents($fileName, date('Y-m-d H:i:s'));
+        $action = new MarkAppleRottenAction();
 
-        $count = AppleRepository::markRottenApples();
+        $count = $action->execute();
 
         echo "Применено $count записей";
 
