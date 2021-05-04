@@ -2,18 +2,12 @@
 
 namespace backend\controllers;
 
-use backend\dataProvider\ColorDataProvider;
-use backend\workflow\enums\StatusEnums;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use backend\service\AppleTreeService;
-use backend\exception\AppleNotFoundException;
-use backend\exception\FieldNotValidException;
-use backend\exception\NotWorkflowActionException;
 use backend\service\AppleService;
-use backend\filters\front\AppleFilter;
 use backend\compositor\front\TreeCompositor;
 use backend\filters\front\VolumeFilter;
 

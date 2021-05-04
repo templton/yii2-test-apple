@@ -3,7 +3,6 @@
 namespace backend\compositor\front;
 
 use backend\dataProvider\ColorDataProvider;
-use backend\models\domain\Apple;
 use backend\service\AppleTreeService;
 use backend\filters\front\ColorFilter;
 use backend\filters\front\TreeFilter;
