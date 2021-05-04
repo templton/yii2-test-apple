@@ -15,6 +15,7 @@ use backend\exception\NotWorkflowActionException;
 use backend\service\AppleService;
 use backend\filters\front\AppleFilter;
 use backend\compositor\front\TreeCompositor;
+use backend\filters\front\VolumeFilter;
 
 /**
  * Class TreeController
@@ -38,11 +39,6 @@ class TreeController extends Controller
      */
     protected $treeCompositor;
 
-
-    const TREE_ACTION_CREATE_NEW = 'tree_action_create_new';
-    const APPLE_ACTION_EAT = 'apple_action_eat';
-    const APPLE_ACTION_FALL = 'apple_action_fall';
-
     public function behaviors()
     {
         return [
@@ -50,7 +46,7 @@ class TreeController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index','create-new-tree'],
+                        'actions' => ['index','create-new-tree','apple-fall','apple-eat'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -60,6 +56,8 @@ class TreeController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'create-new-tree' => ['post'],
+                    'apple-fall' => ['post'],
+                    'apple-eat' => ['post'],
                 ],
             ],
         ];
@@ -71,95 +69,64 @@ class TreeController extends Controller
                                 TreeCompositor $treeCompositor)
     {
         parent::__construct($id, $module, $config);
+
         $this->appleTreeService = $appleTreeService;
         $this->appleService = $appleService;
         $this->treeCompositor = $treeCompositor;
     }
 
-    public function actionFallApple()
+    public function actionIndex()
     {
-
+        return $this->renderWithTree();
     }
 
     public function actionCreateNewTree()
     {
         $this->appleTreeService->createNewTree();
 
-        $treeFrontData = $this->treeCompositor->treeToFrontModel();
+        return $this->renderWithTree();
+    }
+
+    public function actionAppleFall()
+    {
+        $appleId = Yii::$app->request->post('appleId');
+
+        $error = null;
+
+        try{
+            $this->appleService->fallApple($appleId);
+        }catch (\Throwable $e){
+            $error = $e->getMessage();
+        }
+
+        return $this->renderWithTree($appleId, $error);
+    }
+
+    public function actionAppleEat()
+    {
+        $appleId = Yii::$app->request->post('appleId');
+        $volume = Yii::$app->request->post('volume');
+        $volume = VolumeFilter::VolumeToBackModel($volume);
+
+        $error = null;
+
+        try{
+            $this->appleService->eatApple($appleId, $volume);
+        }catch (\Throwable $e){
+            $error = $e->getMessage();
+        }
+
+        return $this->renderWithTree($appleId, $error);
+    }
+
+    protected function renderWithTree($appleId = null, $error = null)
+    {
+        $treeFrontData = $this->treeCompositor->treeToFrontModel($appleId, $error);
 
         return $this->render('index', [
             'apples' => $treeFrontData['apples'],
             'colors' => $treeFrontData['colors'],
             'appleId' => null
         ]);
-    }
-
-    public function actionIndex()
-    {
-        $appleId = Yii::$app->request->post('appleId');
-        $errors = null;
-
-        if (Yii::$app->request->isPost){
-            $errors = $this->processFrontTask();
-        }
-
-        $objects = $this->appleTreeService->getAllApples();
-
-        $colors = [];
-        $apples = [];
-        foreach ($objects as $apple) {
-            $colors[] = $apple->color->sys_name;
-
-            $appleToFront = AppleFilter::appleToFrontEndModel($apple);
-
-            $appleToFront['action_fall'] = $apple->status->sys_name === StatusEnums::STATE_ON_TREE ? self::APPLE_ACTION_FALL : null;
-            $appleToFront['action_eat'] = $apple->status->sys_name === StatusEnums::STATE_ON_GROUND ? self::APPLE_ACTION_EAT : null;
-            $appleToFront['errors'] = $apple->id == $appleId && $errors ? $errors : null;
-
-            $apples[] = $appleToFront;
-        }
-
-        $colors = array_unique($colors);
-
-        return $this->render('index', [
-            'apples' => $apples,
-            'colors' => $colors,
-            'appleId' => $appleId
-        ]);
-    }
-
-    private function processFrontTask()
-    {
-        $errors = [];
-        $appleId = Yii::$app->request->post('appleId');
-        $volume = Yii::$app->request->post('volume');
-
-        if ($volume>0){
-            $volume = $volume/100;
-        }
-
-        try{
-            switch (Yii::$app->request->post('task')){
-                case self::TREE_ACTION_CREATE_NEW:
-                    $this->appleTreeService->createNewTree();
-                    break;
-                case self::APPLE_ACTION_EAT:
-                    $this->appleService->eatApple($appleId, $volume);
-                    break;
-                case self::APPLE_ACTION_FALL:
-                    $this->appleService->fallApple($appleId);
-                    break;
-            }
-        }catch (FieldNotValidException $e){
-            $errors[] = 'Передан невалидный параметр. ' . $e->getMessage();
-        }catch (NotWorkflowActionException $e){
-            $errors[] = 'Событие не соответствует бизнес процессу. ' . $e->getMessage();
-        }catch (AppleNotFoundException $e){
-            $errors[] = 'Яблоко с запрошенным ID не найдено.' . $e->getMessage();
-        }catch (\Throwable $e){
-            $errors[] = 'Ошибка приложения. ' . $e->getMessage();
-        }
-
-        return $errors;
     }
 }

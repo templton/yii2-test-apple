@@ -17,12 +17,12 @@ class TreeCompositor
         $this->appleTreeService = $appleTreeService;
     }
 
-    public function treeToFrontModel()
+    public function treeToFrontModel($appleId=null, $error=null): array
     {
         $colors = $this->getColorsToFrontModel();
         $apples = TreeFilter::treeToFrontModel($this->appleTreeService->getAllApples());
 
-        $apples = $this->appleWithErrors($apples);
+        $apples = $this->appleWithErrors($apples, $appleId, $error);
 
         return [
             'colors' => $colors,
@@ -31,7 +31,7 @@ class TreeCompositor
 
     }
 
-    protected function getColorsToFrontModel()
+    protected function getColorsToFrontModel(): array
     {
         $colors = [];
         $colorObjects = ColorDataProvider::getAllColors();
@@ -42,10 +42,10 @@ class TreeCompositor
         return $colors;
     }
 
-    protected function appleWithErrors($apples)
+    public function appleWithErrors(array $apples, int $appleId = null, $error = null): array
     {
         foreach ($apples as $key => $item) {
-            $apples[$key]['errors'] = [];
+            $apples[$key]['errors'] = $item['id'] == $appleId ? $error : null;
         }
 
         return $apples;

@@ -70,9 +70,7 @@ if (isset($colors) && is_array($colors)){
                     <?php }?>
 
                     <?php if ($apple['errors']) { ?>
-                        <?php foreach ($apple['errors'] as $error) {
-                            ?><div class="alert-danger"><?= $error ?></div><?php
-                        } ?>
+                            <div class="alert-danger"><?= $apple['errors'] ?></div>
                     <?php }?>
 
                 </div>
