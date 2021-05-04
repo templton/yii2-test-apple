@@ -2,6 +2,7 @@
 
 use backend\service\AppleTreeService;
 use backend\service\AppleService;
+use backend\compositor\front\TreeCompositor;
 
 return [
     'aliases' => [
@@ -22,12 +23,15 @@ return [
         ],
     ],
     'container' => [
-        'definitions' => [
+        'singletons' => [
             AppleTreeService::class => [
                 'class' => AppleTreeService::class
             ],
             AppleService::class => [
                 'class' => AppleService::class
+            ],
+            TreeCompositor::class => [
+                'class' => TreeCompositor::class
             ]
         ],
     ]

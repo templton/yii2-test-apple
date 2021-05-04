@@ -35,16 +35,4 @@ class Apple extends ActiveRecord
     {
         return $this->hasOne(Status::class, ['id' => 'status_id'])->one();
     }
-
-    public function toFrontEndArray()
-    {
-        $volume = $this->current_volume * 100;
-        return [
-            'id' => $this->id,
-            'color' => $this->color->sys_name,
-            'fallenDate' => $this->fallen_date,
-            'statusName' => $this->status->name,
-            'currentVolume' => $volume . '%'
-        ];
-    }
 }

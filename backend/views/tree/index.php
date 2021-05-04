@@ -6,7 +6,6 @@ use yii\helpers\Html;
 /**
  * @var $colors array
  * @var $apples array
- * @var $actionCreateNewTree string
  * @var $appleId ?int
  */
 
@@ -30,8 +29,7 @@ if (isset($colors) && is_array($colors)){
 
 <div class="row">
     <div class="col-sm-12">
-        <?= Html::beginForm(['tree/index'], 'post') ?>
-        <?= Html::input('hidden', 'task', $actionCreateNewTree) ?>
+        <?= Html::beginForm(['tree/create-new-tree'], 'post') ?>
         <?= Html::submitButton('Пересоздать набор яблок') ?>
         <?= Html::endForm() ?>
     </div>
@@ -50,24 +48,22 @@ if (isset($colors) && is_array($colors)){
                     <div>Осталось: <?= $apple['currentVolume'] ?></div>
                     <div>Дата падения: <?= $apple['fallenDate'] ?></div>
 
-                    <?php if ($apple['action_fall']) { ?>
+                    <?php if ($apple['can_fall']) { ?>
                         <div class="action-block">
                             <div class="action-header">Бросить яблоко на землю</div>
-                            <?= Html::beginForm(['tree/index'], 'post') ?>
+                            <?= Html::beginForm(['tree/apple-fall'], 'post') ?>
                             <?= Html::input('hidden', 'appleId', $apple['id']) ?>
-                            <?= Html::input('hidden', 'task', $apple['action_fall']) ?>
                             <?= Html::submitButton('Бросить') ?>
                             <?= Html::endForm() ?>
                         </div>
                     <?php }?>
 
-                    <?php if ($apple['action_eat']) { ?>
+                    <?php if ($apple['can_eat']) { ?>
                         <div class="action-block">
                             <div class="action-header">Откусить от яблока %</div>
-                            <?= Html::beginForm(['tree/index'], 'post') ?>
+                            <?= Html::beginForm(['tree/apple-eat'], 'post') ?>
                             <?= Html::input('text', 'volume', '30') ?>
                             <?= Html::input('hidden', 'appleId', $apple['id']) ?>
-                            <?= Html::input('hidden', 'task', $apple['action_eat']) ?>
                             <?= Html::submitButton('Откусить') ?>
                             <?= Html::endForm() ?>
                         </div>

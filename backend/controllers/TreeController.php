@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\dataProvider\ColorDataProvider;
 use backend\workflow\enums\StatusEnums;
 use Yii;
 use yii\filters\AccessControl;
@@ -12,6 +13,8 @@ use backend\exception\AppleNotFoundException;
 use backend\exception\FieldNotValidException;
 use backend\exception\NotWorkflowActionException;
 use backend\service\AppleService;
+use backend\filters\front\AppleFilter;
+use backend\compositor\front\TreeCompositor;
 
 /**
  * Class TreeController
@@ -30,6 +33,12 @@ class TreeController extends Controller
      */
     protected $appleService;
 
+    /**
+     * @var TreeCompositor
+     */
+    protected $treeCompositor;
+
+
     const TREE_ACTION_CREATE_NEW = 'tree_action_create_new';
     const APPLE_ACTION_EAT = 'apple_action_eat';
     const APPLE_ACTION_FALL = 'apple_action_fall';
@@ -41,20 +50,48 @@ class TreeController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index'],
+                        'actions' => ['index','create-new-tree'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
                 ],
-            ]
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'create-new-tree' => ['post'],
+                ],
+            ],
         ];
     }
 
-    public function __construct($id, $module, $config = [], AppleTreeService $appleTreeService, AppleService $appleService)
+    public function __construct($id, $module, $config = [],
+                                AppleTreeService $appleTreeService,
+                                AppleService $appleService,
+                                TreeCompositor $treeCompositor)
     {
         parent::__construct($id, $module, $config);
         $this->appleTreeService = $appleTreeService;
         $this->appleService = $appleService;
+        $this->treeCompositor = $treeCompositor;
+    }
+
+    public function actionFallApple()
+    {
+
+    }
+
+    public function actionCreateNewTree()
+    {
+        $this->appleTreeService->createNewTree();
+
+        $treeFrontData = $this->treeCompositor->treeToFrontModel();
+
+        return $this->render('index', [
+            'apples' => $treeFrontData['apples'],
+            'colors' => $treeFrontData['colors'],
+            'appleId' => null
+        ]);
     }
 
     public function actionIndex()
@@ -73,7 +110,8 @@ class TreeController extends Controller
         foreach ($objects as $apple) {
             $colors[] = $apple->color->sys_name;
 
-            $appleToFront = $apple->toFrontEndArray();
+            $appleToFront = AppleFilter::appleToFrontEndModel($apple);
+
             $appleToFront['action_fall'] = $apple->status->sys_name === StatusEnums::STATE_ON_TREE ? self::APPLE_ACTION_FALL : null;
             $appleToFront['action_eat'] = $apple->status->sys_name === StatusEnums::STATE_ON_GROUND ? self::APPLE_ACTION_EAT : null;
             $appleToFront['errors'] = $apple->id == $appleId && $errors ? $errors : null;
@@ -84,7 +122,6 @@ class TreeController extends Controller
         $colors = array_unique($colors);
 
         return $this->render('index', [
-            'actionCreateNewTree' => self::TREE_ACTION_CREATE_NEW,
             'apples' => $apples,
             'colors' => $colors,
             'appleId' => $appleId

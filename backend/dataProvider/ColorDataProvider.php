@@ -15,4 +15,11 @@ class ColorDataProvider
             ->limit(1)
             ->one();
     }
+
+    public static function getAllColors(): array
+    {
+        return Color::find()
+            ->select('*')
+            ->all();
+    }
 }
